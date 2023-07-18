@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #table {
+        font-family: arial, sans-serif;
+        border-collapse: collapse;
+        width: 100%;
+      }
+      td,
+      th {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+      }
+      tr:nth-child(even) {
+        background-color: #dddddd;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; justify-content: center; align-items: center">
+      <input placeholder="enter email" id="search" />
+      <button id="searchBtn">Search</button>
+    </div>
+
+    <!-- display result -->
+    <div style="margin: 5%">
+      <table id="table" style="width: 100%">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Team Name</th>
+          <th>Number</th>
+          <th>City</th>
+          <th>URL</th>
+        </tr>
+        <!-- <tr class="tableData"></tr> -->
+      </table>
+    </div>
+
+    <script>
+      document
+        .getElementById("searchBtn")
+        .addEventListener("click", function () {
+          const user = document.getElementById("search").value;
+          console.log(user, "user");
+          getUserDetails(user);
+        });
+      async function getUserDetails(user) {
+        await fetch(`http://localhost:8080/getuser?email=${user}`, {
+          method: "GET",
+          header: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((data) => {
+            appendData(data);
+          })
+          .catch((err) => console.log(err));
+      }
+
+      function appendData(data) {
+        document.getElementById("search").value = null;
+        [data].forEach((el) => {
+          const tr = document.createElement("tr");
+          const name = document.createElement("td");
+          name.innerText = el.full_name;
+          const email = document.createElement("td");
+          email.innerText = el.email;
+          const teamName = document.createElement("td");
+          teamName.innerText = el.team_name;
+          const number = document.createElement("td");
+          number.innerText = el.number;
+          const city = document.createElement("td");
+          city.innerText = el.city;
+          const url = document.createElement("td");
+          url.innerText = el.url;
+          tr.append(name, email, teamName, number, city, url);
+          document.getElementById("table").append(tr);
+        });
+      }
+    </script>
+  </body>
+</html>
