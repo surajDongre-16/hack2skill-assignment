@@ -4,8 +4,8 @@ const fs = require("fs");
 require("dotenv").config();
 
 const { connection } = require("./config/db");
-const UserModel = require("./models/user.module");
-const TeamModel = require("./models/team.module");
+const UserModel = require("./models/User.module");
+const TeamModel = require("./models/Team.module");
 
 const app = express();
 app.use(express.json());
